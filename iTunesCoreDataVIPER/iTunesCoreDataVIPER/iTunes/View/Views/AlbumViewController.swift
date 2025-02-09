@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 final class AlbumViewController: UIViewController {
-    var album: AlbumModel?
+    var presenter: AlbumPresenterProtocol!
 
     private let albumImageView: UIImageView = {
         let image = UIImageView()
@@ -45,7 +45,7 @@ final class AlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        setupAlbum()
+        presenter.loadAlbumDetails()
     }
 
     private func setupViews() {
@@ -78,20 +78,14 @@ final class AlbumViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
+}
 
-    private func setupAlbum() {
-        guard let album else {
-            return
-        }
-
-        guard let imageData = CoreDataManager.shared.fetchImageData(forImageId: Int(album.artistId)),
-              let image = UIImage(data: imageData) else {
-            return
-        }
-
-        albumImageView.image = image
+// MARK: - SearchViewProtocol
+extension AlbumViewController: AlbumViewProtocol {
+    func displayAlbumDetails(album: AlbumModel, image: UIImage) {
         albumNameLabel.text = album.collectionName
         artistNameLabel.text = album.artistName
         collectionPriceLabel.text = "\(album.collectionPrice) $"
+        albumImageView.image = image
     }
 }
