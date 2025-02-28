@@ -6,7 +6,6 @@
 //
 
 import CoreData
-import UIKit
 
 final class CoreDataManager: StorageManagerProtocol {
     private let persistentContainer: NSPersistentContainer = {
